@@ -9,6 +9,6 @@ CREATE TABLE upcoming_appts (
     copay numeric,
     doc_bill numeric,
     insurance_bill numeric,
-    upcoming_appt BOOLEAN NOT NULL 
+    upcoming_appt BOOLEAN NOT NULL
 );
 

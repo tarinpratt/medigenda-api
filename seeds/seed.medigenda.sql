@@ -30,11 +30,5 @@ VALUES
 ('2019-09-21', '11:00 am', 'Dr.Nagaiah', 'Arizona Oncology', 'neulasta shot','none', 0, 23, 0, true, 1)
 ;
 
--- INSERT INTO past_appts
--- copay, doc_bill, insurance_bill, other_notes, upcoming_appts_id, user_id)
--- VALUES(
--- (45, 0, 20, 'waiting on doc bill', 1, 1),
--- (0, 23, 0, 'messed up copay', 2, 1)
--- ;
 
 COMMIT;
