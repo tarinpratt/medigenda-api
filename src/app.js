@@ -7,7 +7,6 @@ const { NODE_ENV } = require('./config')
 const winston = require('winston');
 const medLogRouter = require('./medLog/medLog-router')
 const upcomingApptsRouter = require('./upcoming_appts/upcoming_appts-router')
-const pastApptsRouter = require('./past_appts/past_appts-router')
 const usersRouter = require('./users/user-router')
 const authRouter = require('./auth/auth-router')
 
@@ -40,7 +39,6 @@ const logger = winston.createLogger({
 
 app.use('/api/medLog', medLogRouter)
 app.use('/api/upcoming_appts', upcomingApptsRouter)
-app.use('/api/past_appts', pastApptsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/auth', authRouter)
 
