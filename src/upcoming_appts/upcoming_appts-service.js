@@ -3,39 +3,6 @@ const UpcomingApptsService = {
         return knex.select('*').from('upcoming_appts')
     }, 
 
-    getAllEntries(db) {
-        return db
-        .from('upcoming_appts AS upa')
-        .select(
-            'upa.id',
-            'upa.appt_date',
-            'upa.appt_time',
-            'upa.appt_doctor',
-            'upa.appt_location',
-            'upa.appt_purpose',
-            'upa.appt_notes',
-            'upa.copay',
-            'upa.doc_bill',
-            'upa.insurance_bill',
-            'upa.upcoming_appt',
-            db.raw(
-                `json_strip_nulls(
-                    json_build_object(
-                        'id', usr.id,
-                        'username', usr.username,
-                        'email', usr.email
-                    )
-                ) AS "user"`
-            ),
-        )
-        .join('users as usr',
-        'upa.user_id',
-        'usr.id',
-        )
-        .groupBy('upa.id', 'upa.user_id', 'usr.id')
-        .orderBy('upa.id', 'asc')
-    },
-
     insertAppt(db, newAppt) {
         return db
             .insert(newAppt)
@@ -45,6 +12,7 @@ const UpcomingApptsService = {
                 return rows[0]
             })
     },
+
    
     getById(db, id) {
         return db

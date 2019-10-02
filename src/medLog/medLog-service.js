@@ -26,7 +26,6 @@ const MedLogService = {
         )
         .groupBy('md.id', 'md.user_id', 'usr.id')
         .orderBy('md.id', 'asc')
-        //.orderBy('md.date', 'asc')
     },
 
     insertEntry(db, newEntry) {

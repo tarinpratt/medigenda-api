@@ -198,7 +198,6 @@ describe(`Protected Endpoints`, () => {
                 medname: 'Promethazine',
                 amounttaken: '1 pill',
                 reason: 'Nausea',
-                //user_id: testUser.id
               }
 
               return supertest(app)
@@ -230,8 +229,7 @@ describe(`Protected Endpoints`, () => {
                 time: '09:35:00',
                 medname: 'Promethazine',
                 amounttaken: '1 pill',
-                reason: 'Nausea',
-                //user_id: testUser.id
+                reason: 'Nausea'
               }
           
           it(`responds w 400 and an error message when the ${field} is missing `, () => {

@@ -36,16 +36,6 @@ describe.only('upcoming_appts Endpoints', function() {
         afterEach('cleanup', () => helpers.cleanTables(db))
 
          describe(`Protected Endpoints`, () => {
-            // beforeEach('insert appts', () => {
-            //     helpers.seedTable(
-            //         db,
-            //         testUsers,
-            //         testMedLog,
-            //         testUpcomingAppts,
-            //         testPastAppts
-            //     )
-            // })
-        
             const protectedEndpoints = [
                 {
                     name: 'GET /api/upcoming_appts',
@@ -130,6 +120,7 @@ describe.only('upcoming_appts Endpoints', function() {
                       appt
                     )
                   )
+                 
                  return supertest(app)
                    .get('/api/upcoming_appts')
                    .set('Authorization', makeAuthHeader(testUsers[0]))
@@ -205,16 +196,15 @@ describe.only('upcoming_appts Endpoints', function() {
       })
 
       describe(`POST /api/upcoming_appts`, () => {
-           const testUser = testUsers[0]
+           
            beforeEach('insert entries', () => 
-           helpers.seedTable(
+           helpers.seedUsers(
                db,
-               testUsers,
-               testMedLog,
-               testUpcomingAppts
+               testUsers
            )
        )
-  
+
+  const testUser = testUsers[0]
           it(`creates an entry responding w 201 and the new entry`, () => {
               const newAppt = {
                 appt_date: '2019-09-20T00:00:00.000Z',
@@ -227,11 +217,12 @@ describe.only('upcoming_appts Endpoints', function() {
                 doc_bill: '3',
                 insurance_bill: '3',
                 upcoming_appt: true
-                //user_id: testUser.id
               }
-            
+
+
               return supertest(app)
                 .post('/api/upcoming_appts')
+                .set('Authorization', makeAuthHeader(testUsers[0]))
                 .send(newAppt)
                 .expect(res => {
                     expect(res.body.appt_date).to.eql(newAppt.appt_date)
@@ -269,7 +260,6 @@ describe.only('upcoming_appts Endpoints', function() {
                 doc_bill: 3,
                 insurance_bill: 3,
                 upcoming_appt: true
-                //user_id: testUser.id
               }
           
           it(`responds w 400 and an error message when the ${field} is missing `, () => {

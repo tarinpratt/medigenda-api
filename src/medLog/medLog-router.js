@@ -35,6 +35,7 @@ medLogRouter
                 error: { message: `Missing key and value in request body` }
             })
         }
+
         newEntry.user_id = req.user.id
 
         MedLogService.insertEntry(

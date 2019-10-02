@@ -72,30 +72,6 @@ function MakeMedLogArray(users) {
 
 }
 
-// function MakePastApptsArray(users, upcoming_appts) {
-//     return [
-//             {
-//                 id: 1,
-//                 copay: '45',
-//                 doc_bill: '0',
-//                 insurance_bill: '53.75',
-//                 other_notes: 'Waiting on doctor bill',
-//                 upcoming_appts_id: upcoming_appts[0].id,
-//                 user_id: users[0].id
-                
-//             },
-//             {
-//                 id: 2,
-//                 copay: '0',
-//                 doc_bill: '0',
-//                 insurance_bill: '0',
-//                 other_notes: `Haven't received billing info yet`,
-//                 upcoming_appts_id: upcoming_appts[1].id,
-//                 user_id: users[0].id
-//             }
-//     ]
- 
-// }
 function MakeUpcomingApptsArray(users) {
     return [
             {
@@ -140,11 +116,7 @@ function MakeExpectedEntry(users, entry) {
       medname: entry.medname,
       amounttaken: entry.amounttaken,
       reason: entry.reason,
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-      },
+      user_id: 1
     }
   }
 
@@ -163,47 +135,17 @@ function MakeExpectedEntry(users, entry) {
       doc_bill: appt.doc_bill,
       insurance_bill: appt.insurance_bill,
       upcoming_appt: appt.upcoming_appt,
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-      },
+      user_id: 1
     }
   }
 
-  function MakeExpectedPastAppt(users, upcoming_appts, appt) {
-    const user = users.find(user => user.id === appt.user_id)
-    const upcoming_appt = upcoming_appts.find(upcoming_appt => upcoming_appt.id === appt.upcoming_appts_id)
-    return {
-      id: appt.id,
-      copay: appt.copay,
-      doc_bill: appt.doc_bill,
-      insurance_bill: appt.insurance_bill,
-      other_notes: appt.other_notes,
-      upcoming_appts: {
-        id: upcoming_appt.id,
-        appt_date: upcoming_appt.appt_date,
-        appt_time: upcoming_appt.appt_time,
-        appt_doctor: upcoming_appt.appt_doctor,
-        appt_location: upcoming_appt.appt_location,
-        appt_purpose: upcoming_appt.appt_purpose,
-        appt_notes: upcoming_appt.appt_notes,
-        user: upcoming_appt.user_id
-      },
-        user: {
-            id: user.id,
-            username: user.username,
-            email: user.email,
-          } 
-      }
-    }
+
   
 
   function makeFixtures() {
     const testUsers = MakeUserArray()
     const testMedLog = MakeMedLogArray(testUsers)
     const testUpcomingAppts = MakeUpcomingApptsArray(testUsers)
-    // const testPastAppts = MakePastApptsArray(testUsers, testUpcomingAppts)
     return { testUsers, testMedLog, testUpcomingAppts}
   }
 
@@ -214,7 +156,6 @@ function MakeExpectedEntry(users, entry) {
     }))
     return db.into('users').insert(preppedUsers)
       .then(() =>
-        // update the auto sequence to stay in sync
         db.raw(
           `SELECT setval('users_id_seq', ?)`,
           [users[users.length - 1].id],
@@ -262,7 +203,6 @@ function MakeExpectedEntry(users, entry) {
     }))
     return db.into('users').insert(preppedUsers)
       .then(() =>
-        // update the auto sequence to stay in sync
         db.raw(
           `SELECT setval('users_id_seq', ?)`,
           [users[users.length - 1].id],
@@ -285,7 +225,6 @@ function MakeExpectedEntry(users, entry) {
         ...user,
         password: bcrypt.hashSync(user.password, 1)
       }))
-    // use a transaction to group the queries and auto rollback on any failure
     return db.transaction(async trx => {
       await trx.into('users').insert(preppedUsers)
       await trx.raw(
@@ -294,7 +233,6 @@ function MakeExpectedEntry(users, entry) {
       )
 
       await trx.into('medlog').insert(medlog)      
-      // update the auto sequence to match the forced id values
        await trx.raw(
                 `SELECT setval('medlog_id_seq', ?)`,
                 [medlog[medlog.length - 1].id],
@@ -304,12 +242,6 @@ function MakeExpectedEntry(users, entry) {
                `SELECT setval('upcoming_appts_id_seq', ?)`,
                [upcoming_appts[upcoming_appts.length - 1].id],
        )
-      //  await trx.into('past_appts').insert(past_appts)
-      //  await trx.raw(
-      //          `SELECT setval('past_appts_id_seq', ?)`,
-      //          [past_appts[past_appts.length - 1].id]
-       //)
- 
     })
   }
 
@@ -319,13 +251,10 @@ function MakeExpectedEntry(users, entry) {
       seedTable,
       MakeUserArray,
       MakeMedLogArray,
-      //MakePastApptsArray,
       MakeUpcomingApptsArray,
       MakeExpectedEntry,
       cleanTables,
       makeMaliciousMedLog,
       seedMaliciousMedLog,
-      MakeExpectedAppt
-      //MakeExpectedPastAppt
-      
+      MakeExpectedAppt    
   }

@@ -36,14 +36,17 @@ upcomingApptsRouter
      .post(requireAuth, jsonParser, (req, res, next) => {
         const { appt_date, appt_time, appt_doctor, appt_location, appt_purpose, appt_notes, copay, doc_bill, insurance_bill, upcoming_appt} = req.body
         const newAppt = { appt_date, appt_time, appt_doctor, appt_location, appt_purpose, appt_notes, copay, doc_bill, insurance_bill, upcoming_appt}
+        
         if(!appt_date || !appt_time || !appt_doctor || !appt_location || !appt_purpose ||!copay || !doc_bill || !insurance_bill || !upcoming_appt ) {
             return res.status(400).json({
                 error: { message: `Missing key and value in request body` }
             })
         }
+
         newAppt.user_id = req.user.id
 
         UpcomingApptsService.insertAppt(
+            
             req.app.get('db'),
             newAppt
         )
