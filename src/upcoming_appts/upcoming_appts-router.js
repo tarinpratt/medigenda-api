@@ -27,90 +27,70 @@ upcomingApptsRouter
         const knexInstance = req.app.get('db')
         UpcomingApptsService.getAllEntriesByUser(knexInstance, req.user.id)
         .then(appts => {
-            res.json(appts)
+        res.json(appts)
         })
         .catch(next)
     })
-
-
-     .post(requireAuth, jsonParser, (req, res, next) => {
-        const { appt_date, appt_time, appt_doctor, appt_location, appt_purpose, appt_notes, copay, doc_bill, insurance_bill, upcoming_appt} = req.body
-        const newAppt = { appt_date, appt_time, appt_doctor, appt_location, appt_purpose, appt_notes, copay, doc_bill, insurance_bill, upcoming_appt}
-        
+    .post(requireAuth, jsonParser, (req, res, next) => {
+        const { appt_date, appt_time, appt_doctor, appt_location, appt_purpose, appt_notes, copay, doc_bill, insurance_bill, upcoming_appt } = req.body
+        const newAppt = { appt_date, appt_time, appt_doctor, appt_location, appt_purpose, appt_notes, copay, doc_bill, insurance_bill, upcoming_appt }    
         if(!appt_date || !appt_time || !appt_doctor || !appt_location || !appt_purpose ||!copay || !doc_bill || !insurance_bill || !upcoming_appt ) {
-            return res.status(400).json({
-                error: { message: `Missing key and value in request body` }
-            })
+            return res.status(400).json({ error: { message: `Missing key and value in request body` } })
         }
+    newAppt.user_id = req.user.id
 
-        newAppt.user_id = req.user.id
-
-        UpcomingApptsService.insertAppt(
-            
-            req.app.get('db'),
-            newAppt
+    UpcomingApptsService.insertAppt(
+        req.app.get('db'),
+        newAppt
         )
         .then(appt => {
-            res.status(201)
-                .location(path.posix.join(req.originalUrl + `/${appt.id}`))
-                .json(serializeAppt(appt))
+        res.status(201)
+            .location(path.posix.join(req.originalUrl + `/${appt.id}`))
+            .json(serializeAppt(appt))
         })
         .catch(next)
-
-
      })
 
-
-
 upcomingApptsRouter
-  .route('/:upcoming_appt_id')
-  .all(requireAuth, (req, res, next) => {
+    .route('/:upcoming_appt_id')
+    .all(requireAuth, (req, res, next) => {
     UpcomingApptsService.getById(
       req.app.get('db'),
       req.params.upcoming_appt_id
     )
-      .then(appt => {
-        if (!appt) {
-          return res.status(404).json({
-            error: { message: `appt does not exist` }
-          })
-        }
-        res.appt = appt
-        next()
+    .then(appt => {
+    if (!appt) {
+    return res.status(404).json({ error: { message: `appt does not exist` } })
+    }
+    res.appt = appt
+    next()
     })
     .catch(next)
-})
-       .get((req, res) => { 
-           res.json(serializeAppt(res.appt))
- 
-       })
+    })
+    .get((req, res) => { 
+    res.json(serializeAppt(res.appt))
+    })
        
-  .delete( (req, res, next) => {
+    .delete( (req, res, next) => {
     UpcomingApptsService.deleteAppt(
-          req.app.get('db'),
-          req.params.upcoming_appt_id
+        req.app.get('db'),
+        req.params.upcoming_appt_id
       )
         .then(numRowsAffected => {
-            if(numRowsAffected > 0 ) {
-                res.status(204).end()
-            } else {
-                res.status(404).json({
-                    error: { message: `appt does not exist` }
-                })
-            }
+        if(numRowsAffected > 0 ) {
+        res.status(204).end()
+        } else { res.status(404).json({ error: { message: `appt does not exist` } })
+        }
         })
         .catch(next)
-  })
+        })
 
-  .patch( jsonParser, (req, res, next) => {
+    .patch( jsonParser, (req, res, next) => {
       const { appt_date, appt_time, appt_doctor, appt_location, appt_purpose, appt_notes, copay, doc_bill, insurance_bill, upcoming_appt } = req.body
-      const apptToUpdate = { appt_date, appt_time, appt_doctor, appt_location, appt_purpose, appt_notes, copay, doc_bill, insurance_bill, upcoming_appt}
-
+      const apptToUpdate = { appt_date, appt_time, appt_doctor, appt_location, appt_purpose, appt_notes, copay, doc_bill, insurance_bill, upcoming_appt }
       const numberOfValues = Object.values(apptToUpdate).filter(Boolean).length
       if(numberOfValues === 0) {
-          return res.status(400).json({
-              error: {message : `request body must contain appt_date, appt_time, appt_doctor, appt_location, appt_purpose, appt_notes`}
-          })
+          return res.status(400).json({ error: {message : `request body must contain appt_date, appt_time, appt_doctor, appt_location, appt_purpose, appt_notes`} })
       }
       apptToUpdate.user_id = req.user.id
       UpcomingApptsService.updateAppt(
@@ -122,14 +102,11 @@ upcomingApptsRouter
         if(numRowsAffected > 0 ) {
             res.status(204).end()
         } else {
-            res.status(404).json({
-                error: { message: `appt does not exist` }
-            })
-        }
-        
+        res.status(404).json({ error: { message: `appt does not exist` } })
+        }  
       })
       .catch(next)
-  } )
+    })
 
 
 module.exports = upcomingApptsRouter

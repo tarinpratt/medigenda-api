@@ -10,9 +10,7 @@ const upcomingApptsRouter = require('./upcoming_appts/upcoming_appts-router')
 const usersRouter = require('./users/user-router')
 const authRouter = require('./auth/auth-router')
 
-
 const app = express()
-
 
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
@@ -24,7 +22,6 @@ const logger = winston.createLogger({
       new winston.transports.File({ filename: 'info.log' })
     ]
   });
-  
   if (NODE_ENV !== 'production') {
     logger.add(new winston.transports.Console({
       format: winston.format.simple()
@@ -32,31 +29,26 @@ const logger = winston.createLogger({
   }
 
 
-    app.use(morgan(morganOption))
-    app.use(cors())
-    app.use(helmet())
-   app.use(express.json());
+app.use(morgan(morganOption))
+app.use(cors())
+app.use(helmet())
+app.use(express.json());
 
-app.use('/api/medLog', medLogRouter)
+app.use('/api/medlog', medLogRouter)
 app.use('/api/upcoming_appts', upcomingApptsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/auth', authRouter)
 
-app.get('/', (req, res) => {
-      res.send('Hello, world!')
-     })
-
 
 app.use(function errorHandler(error, req, res, next) {
-       let response
-       if (NODE_ENV === 'production') {
-         response = { error: { message: 'server error' } }
-       } else {
-         console.error(error)
-         response = { message: error.message, error }
-       }
-       res.status(500).json(response)
-     })
+  let response
+  if (NODE_ENV === 'production') {response = { error: { message: 'server error' } }
+  } else {
+    console.error(error) 
+    response = { message: error.message, error }
+  }
+    res.status(500).json(response)
+})
     
 
 module.exports = app

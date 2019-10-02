@@ -12,14 +12,14 @@ const MedLogService = {
             'md.reason',
             db.raw(
                 `json_strip_nulls(
-                    json_build_object(
-                        'id', usr.id,
-                        'username', usr.username,
-                        'email', usr.email
+                json_build_object(
+                    'id', usr.id,
+                    'username', usr.username,
+                    'email', usr.email
                     )
-                ) AS "user"`
-            ),
-        )
+                    ) AS "user"`
+                    ),
+                    )
         .join('users as usr',
         'md.user_id',
         'usr.id',
@@ -79,12 +79,12 @@ const MedLogService = {
           .where({ id })
           .delete()
       },
+
     updateEntry(knex, id, newMedLogFields) {
         return knex('medlog')
             .where({ id })
             .update(newMedLogFields)
-    },
-    
+    },  
 }
 
 

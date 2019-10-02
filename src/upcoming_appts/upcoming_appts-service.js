@@ -13,7 +13,6 @@ const UpcomingApptsService = {
             })
     },
 
-   
     getById(db, id) {
         return db
             .from('upcoming_appts as upa')
@@ -60,12 +59,12 @@ const UpcomingApptsService = {
           .where({ id })
           .delete()
       },
+
     updateAppt(knex, id, newUpcomingApptsFields) {
         return knex('upcoming_appts')
             .where({ id })
             .update(newUpcomingApptsFields)
-    },
-    
+    },   
 }
 
 module.exports = UpcomingApptsService

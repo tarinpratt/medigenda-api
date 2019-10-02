@@ -1,26 +1,64 @@
-# Express Boilerplate!
+# **MediGenda-Server**
 
-This is a boilerplate project used for starting new projects!
+MediGenda is a medical organization tool, built to keep track of upcoming and past medical appointments, billing, and medicinal intake. 
 
-## Set up
+# Server Hosted here:
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+(https://floating-citadel-93144.herokuapp.com/)
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+# API Documentation
 
-## Scripts
+Users
 
-Start the application `npm start`
+* GET '/api/users to view all users
 
-Start nodemon for the application `npm run dev`
+* GET '/api/users/:user_id retrieves user by id
 
-Run the tests `npm test`
+* POST '/api/users creates a new user account
 
-## Deploying
+Medlog
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
+* GET '/api/medlog view all medication log entries for specified user
+
+* GET '/api/medlog/:medlog_id gets a single medication log entry by id
+
+* POST '/api/medlog to post a new medication log entry
+
+* PATCH '/api/medlog/:medlog_id to update an exisiting medication log entry
+
+* DELETE '/api/medlog/:medlog_id to delete a medlog entry
+
+Upcoming Appointments
+
+* GET '/api/upcoming_appts view all upcoming appointments for specified user
+
+* GET '/api/upcoming_appts/:upcoming_appt_id gets a single appointment by id
+
+* POST '/api/upcoming_appts to post a new appointment entry
+
+* PATCH '/api/upcoming_appts/:upcoming_appt_id updates an exisiting appointment
+
+* DELETE '/api/upcoming_appts/:upcoming_appt_id to delete an appointment
+
+Authentication
+
+* POST '/api/auth/login matches given credentials and provides a JWT token
+
+# Technology Used 
+
+* Node.js
+* Express
+* Mocha
+* Chai
+* Postgres
+* Knex.js
+* Supertest
+
+# Security 
+
+Application uses JWT authentication
+
+
+
+
+
